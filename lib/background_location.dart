@@ -33,16 +33,22 @@ class BackgroundLocation {
     }
   }
 
-  static setAndroidConfiguration(int interval) async {
+  static setAndroidConfiguration(int interval,
+      {int fastestInterval = -1, int maxWaitInterval = -1}) async {
     if (Platform.isAndroid) {
-      return await _channel.invokeMethod("set_configuration", <String, dynamic>{
-        "interval": interval.toString(),
-      });
+      var parameters = <String, dynamic>{"interval": interval.toString()};
+
+      if (fastestInterval >= 0)
+        parameters.putIfAbsent("fastest_interval", () => fastestInterval.toString());
+
+      if (maxWaitInterval >= 0)
+        parameters.putIfAbsent("max_wait_interval", () => maxWaitInterval.toString());
+
+      return await _channel.invokeMethod("set_configuration", parameters);
     } else {
       //return Promise.resolve();
     }
   }
-
 
   /// Get the current location once.
   Future<Location> getCurrentLocation() async {

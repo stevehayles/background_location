@@ -99,7 +99,12 @@ class BackgroundLocationPlugin() : MethodCallHandler, PluginRegistry.RequestPerm
             }
             call.method == "set_configuration" -> {
                 val timeInterval: Long? = call.argument<String>("interval")?.toLongOrNull();
+                val fastestInterval: Long? = call.argument<String>("fastest_interval")?.toLongOrNull();
+                val maxWaitInterval: Long? = call.argument<String>("max_wait_interval")?.toLongOrNull();
+                
                 if (timeInterval != null) LocationUpdatesService.UPDATE_INTERVAL_IN_MILLISECONDS = timeInterval
+                if (fastestInterval != null) LocationUpdatesService.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = fastestInterval
+                if (maxWaitInterval != null) LocationUpdatesService.MAX_WAIT_TIME_IN_MILLISECONDS = maxWaitInterval
 
                 result.success(0);
             }
